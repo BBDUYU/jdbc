@@ -6,9 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Ex03 {
+public class Ex04 {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+//		org.doit.domain 패키지 + DeptVO.java
 		Connection conn=null;
 		Statement stmt=null;
 		ResultSet rs=null;
