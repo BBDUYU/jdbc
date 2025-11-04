@@ -8,12 +8,23 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Scanner;
 
+import org.doit.domain.DeptVO;
 import org.doit.domain.EmpVO;
 /**
  *  1. org.doit.domain EmpVO.java 추가
  *  2. ArrayList<EmpVO> list = null
  *  3. dispEmpInfo(list);
+ *  10
+	20
+	30
+	40
+부서 번호를 선택하세요 ? 10 엔터
+
+      [10번 부서원(2명)]
+      1
+      2
  */
 
 
@@ -22,11 +33,12 @@ public class Ex01_03 {
 	public static void main(String[] args)  {
 		//1. jdbc 드라이버
 		String className="oracle.jdbc.driver.OracleDriver";
-		
 		Connection conn=null;
 		Statement stmt=null;
-		ResultSet rs=null;
-		EmpVO vo=null;
+		ResultSet ers=null;
+		ResultSet drs=null;
+		EmpVO evo=null;
+		DeptVO dvo=null;
 		
 		try {
 			Class.forName(className);
@@ -35,34 +47,59 @@ public class Ex01_03 {
 			String user="scott";
 			String password="tiger";
 			conn=DriverManager.getConnection(url,user,password);
-			//3. crud
-			String sql="SELECT * "
-					+ "FROM emp";
-			stmt=conn.createStatement();
-			rs=stmt.executeQuery(sql);
+			// 3-1. 부서정보작업
+			String sql="SELECT * FROM DEPT";
+		    ArrayList<DeptVO> dlist = new ArrayList<DeptVO>();
+		    
+		    stmt=conn.createStatement();
+			drs=stmt.executeQuery(sql);
+			int deptno;
+			String dname,loc;
+			while(drs.next()) {
+				deptno=drs.getInt("deptno");
+				dname=drs.getString("dname");
+				loc=drs.getString("loc");
+				
+				dvo=new DeptVO(deptno,dname,loc);
+				dlist.add(dvo);
+			}
 			
-			int empno,mgr,deptno;
+			drs.close();
+			dispDeptInfo(dlist);
+			
+			// 부서입력작업
+			Scanner scanner= new Scanner(System.in);
+			System.out.println("> 부서 번호 입력 : ");
+			int pDeptno=scanner.nextInt();
+
+			// 3-2. 사원정보작업
+			sql="SELECT * "
+					+ "FROM emp "
+					+ "WHERE deptno = "+ pDeptno;
+			stmt=conn.createStatement();
+			ers=stmt.executeQuery(sql);
+			
+			int empno,mgr;
 			double sal,comm;
 			String ename,job;
 			LocalDate hiredate;
 			
-		    ArrayList<EmpVO> list = new ArrayList<EmpVO>();
-		    
-			while(rs.next()) {
-				empno=rs.getInt("empno");
-				mgr=rs.getInt("mgr");
-				sal=rs.getDouble("sal");
-				comm=rs.getDouble("comm");
-				deptno=rs.getInt("deptno");
+		    ArrayList<EmpVO> elist = new ArrayList<EmpVO>();
+			while(ers.next()) {
+				empno=ers.getInt("empno");
+				mgr=ers.getInt("mgr");
+				sal=ers.getDouble("sal");
+				comm=ers.getDouble("comm");
+				deptno=ers.getInt("deptno");
 				
-				ename=rs.getString("ename");
-				job=rs.getString("job");
-				hiredate=rs.getDate("hiredate").toLocalDate();
+				ename=ers.getString("ename");
+				job=ers.getString("job");
+				hiredate=ers.getDate("hiredate").toLocalDate();
 				
-				vo=new EmpVO(empno,mgr,comm,sal, deptno, ename, job, hiredate);
-				list.add(vo);			
+				evo=new EmpVO(empno,mgr,comm,sal, deptno, ename, job, hiredate);
+				elist.add(evo);			
 			}
-			dispEmpInfo(list);
+			dispEmpInfo(elist);
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -73,7 +110,7 @@ public class Ex01_03 {
 		} finally {
 			//4. db닫기
 			try {
-				rs.close();
+				ers.close();
 				stmt.close();
 				conn.close();
 			} catch (SQLException e) {
@@ -90,11 +127,25 @@ public class Ex01_03 {
 	         System.out.println("조회한 사원이 없다. ");
 	         return; 
 	      }
+		 System.out.printf("%d 부서원수(%d명)\n",list.get(0).getDeptno(),list.size());
+
 	      Iterator<EmpVO> ir = list.iterator();
 	      while(ir.hasNext()) {
-	    	  EmpVO vo=(EmpVO)ir.next();
-			System.out.println(vo);
+	    	  EmpVO evo=(EmpVO)ir.next();
+			System.out.println(evo);
 		}		
+	}
+	private static void dispDeptInfo(ArrayList<DeptVO> list) {
+		 if(  list.isEmpty() ) {
+	         System.out.println("조회한 부서가 없다. ");
+	         return; 
+	      }
+		 
+	      Iterator<DeptVO> ir = list.iterator();
+	      while(ir.hasNext()) {
+			DeptVO vo=(DeptVO)ir.next();
+			System.out.println(vo);
+		}
 	}
 }
 
