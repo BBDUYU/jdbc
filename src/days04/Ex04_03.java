@@ -47,15 +47,12 @@ public class Ex04_03 {
       searchCondition = scanner.nextLine();      
       System.out.print("> 검색어 입력 ? ");      
       searchWord = scanner.nextLine();
-      
-//      sql += " ORDER BY deptno ASC ";
-      
-//      System.out.println( sql ); 
+
 
       try {
          conn = DBConn.getConnection();
          cstmt = conn.prepareCall(sql);
-         // ?
+         
          cstmt.setString(1, searchCondition);
          cstmt.setString(2, searchWord);
          cstmt.registerOutParameter(3, OracleTypes.CURSOR);
