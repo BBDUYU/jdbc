@@ -1,0 +1,69 @@
+package days03;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+import com.util.DBConn;
+
+/**
+ * @author kenik  
+ * @date 2025. 11. 5. 오후 12:35:08
+ * @subject   부서명과 지역명을 입력받아서
+ * @content   tbl_dept INSERT 작업...
+ */ 
+public class Ex04_02 {
+
+	public static void main(String[] args) {
+		
+		String pdname = "QC", ploc = "SEOUL";
+		 
+		Scanner scanner = new Scanner(System.in);		
+		System.out.print("> 부서명 입력 ? ");
+		pdname = scanner.nextLine();		
+		System.out.print("> 지역명 입력 ? ");		
+		ploc = scanner.nextLine();
+		
+		// ? 바인딩변수 사용해서 쿼리 작성
+		String sql = "INSERT INTO tbl_dept "
+				  + " VALUES ( (SELECT MAX(NVL(deptno,0)) + 10 FROM tbl_dept), ?, ? )";
+		//System.out.println( sql );
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+				
+		try {
+			conn = DBConn.getConnection();
+			pstmt =  conn.prepareStatement(sql);
+			// ? ? IN 매개변수가 누락되었다.
+			pstmt.setString(1, pdname);
+			pstmt.setString(2, ploc);
+			int rowCount = pstmt.executeUpdate();
+			
+			if ( rowCount == 1 ) {
+				System.out.println("부서 추가 성공!!!");
+			}
+			
+		} catch (SQLException e) { 
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				DBConn.close();	
+			} catch (SQLException e) { 
+				e.printStackTrace();
+			}
+		} 
+		System.out.println(" end ");
+
+	} // main
+
+} // class
+
+
+
+
+
+

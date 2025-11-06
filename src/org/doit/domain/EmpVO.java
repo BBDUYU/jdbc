@@ -13,6 +13,17 @@ public class EmpVO {
 	private String ename;
 	private String job;
 	private LocalDate hiredate;
+	
+	private double pay;
+	
+	
+	
+	public double getPay() {
+		return pay;
+	}
+	public void setPay(double pay) {
+		this.pay = pay;
+	}
 	public int getEmpno() {
 		return empno;
 	}
@@ -79,8 +90,22 @@ public class EmpVO {
 	@Override
 	public String toString() {
 		return "EmpVO [empno=" + empno + ", mgr=" + mgr + ", sal=" + sal + ", comm=" + comm + ", deptno=" + deptno
-				+ ", ename=" + ename + ", job=" + job + ", hiredate=" + hiredate + "]";
+				+ ", ename=" + ename + ", job=" + job + ", hiredate=" + hiredate + ", pay=" + pay + "]";
 	}
+	public EmpVO(int empno, int mgr, double sal, double comm, int deptno, String ename, String job, LocalDate hiredate,
+			double pay) {
+		super();
+		this.empno = empno;
+		this.mgr = mgr;
+		this.sal = sal;
+		this.comm = comm;
+		this.deptno = deptno;
+		this.ename = ename;
+		this.job = job;
+		this.hiredate = hiredate;
+		this.pay = pay;
+	}
+	
 	
 	
 	

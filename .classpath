@@ -7,6 +7,11 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/oraclexe/app/oracle/product/11.2.0/server/jdbc/lib/ojdbc6.jar"/>
-	<classpathentry kind="lib" path="C:/Tools/lombok.jar"/>
+	<classpathentry kind="src" path=".apt_generated">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Tools/eclipse-jee-2025-06-R-win32-x86_64/eclipse/lombok.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
