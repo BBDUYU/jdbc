@@ -140,8 +140,9 @@ public class BoardService {
 			// 수동 커밋
 			((BoardDAOImpl)this.dao).getConn().commit();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			try {
+				System.out.println("> 삭제 실패로 로그/문자 전송 트랜잭션 롤백됩니다.");
 				((BoardDAOImpl)this.dao).getConn().rollback();
 			} catch (SQLException e1) {
 				e1.printStackTrace();

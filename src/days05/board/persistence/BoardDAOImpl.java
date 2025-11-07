@@ -211,7 +211,9 @@ public class BoardDAOImpl implements BoardDAO{
 		rowCount = pstmt.executeUpdate();
 
 		if(pstmt!=null)pstmt.close();			
-
+		if (rowCount == 0) {
+			throw new SQLException("삭제할 데이터가 존재하지 않습니다. seq=" + seq);
+		}
 		return rowCount;
 	}
 
@@ -224,75 +226,75 @@ public class BoardDAOImpl implements BoardDAO{
 		int rowCount=0;
 
 		pstmt = conn.prepareStatement(sql);
-		
+
 		pstmt.setString(1, dto.getEmail());
 		pstmt.setString(2, dto.getTitle());
 		pstmt.setString(3, dto.getContent());
 		pstmt.setInt(4, dto.getSeq());
-		
+
 		rowCount = pstmt.executeUpdate();
 		if(pstmt!=null)pstmt.close();	
 		return rowCount;
 	}
 	@Override
 	public List<BoardDTO> search(String Condition, String Word) {
-	    String sql = "SELECT seq, title, writer, email, writedate, readed, content "
-	               + "FROM tbl_cstvsboard "
-	               + "WHERE ";
+		String sql = "SELECT seq, title, writer, email, writedate, readed, content "
+				+ "FROM tbl_cstvsboard "
+				+ "WHERE ";
 
-	    // 조건별 SQL 조합
-	    if (Condition.equalsIgnoreCase("t")) {
-	        sql += " REGEXP_LIKE(title, ?, 'i')";
-	    } else if (Condition.equalsIgnoreCase("c")) {
-	        sql += " REGEXP_LIKE(content, ?, 'i')";
-	    } else if (Condition.equalsIgnoreCase("w")) {
-	        sql += " REGEXP_LIKE(writer, ?, 'i')";
-	    } else if (Condition.equalsIgnoreCase("tc")) {
-	        sql += " REGEXP_LIKE(title, ?, 'i') OR REGEXP_LIKE(content, ?, 'i')";
-	    }
+		// 조건별 SQL 조합
+		if (Condition.equalsIgnoreCase("t")) {
+			sql += " REGEXP_LIKE(title, ?, 'i')";
+		} else if (Condition.equalsIgnoreCase("c")) {
+			sql += " REGEXP_LIKE(content, ?, 'i')";
+		} else if (Condition.equalsIgnoreCase("w")) {
+			sql += " REGEXP_LIKE(writer, ?, 'i')";
+		} else if (Condition.equalsIgnoreCase("tc")) {
+			sql += " REGEXP_LIKE(title, ?, 'i') OR REGEXP_LIKE(content, ?, 'i')";
+		}
 
-	    sql += " ORDER BY seq DESC";
+		sql += " ORDER BY seq DESC";
 
-	    List<BoardDTO> list = null;
+		List<BoardDTO> list = null;
 
-	    try {
-	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setString(1, Condition);
-	        this.pstmt.setString(1, Word);
-	        if( Condition.equals("tc") ) this.pstmt.setString(2, Word); 
-	       
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, Condition);
+			this.pstmt.setString(1, Word);
+			if( Condition.equals("tc") ) this.pstmt.setString(2, Word); 
 
-	        rs = pstmt.executeQuery();
 
-	        if (rs.next()) {
-	            list = new ArrayList<>();
-	            do {
-	                BoardDTO vo = new BoardDTO().builder()
-	                        .seq(rs.getInt("seq"))
-	                        .title(rs.getString("title"))
-	                        .writer(rs.getString("writer"))
-	                        .email(rs.getString("email"))
-	                        .writedate(rs.getDate("writedate"))
-	                        .readed(rs.getInt("readed"))
-	                        .content(rs.getString("content"))
-	                        .build();
+			rs = pstmt.executeQuery();
 
-	                list.add(vo);
-	            } while (rs.next());
-	        }
+			if (rs.next()) {
+				list = new ArrayList<>();
+				do {
+					BoardDTO vo = new BoardDTO().builder()
+							.seq(rs.getInt("seq"))
+							.title(rs.getString("title"))
+							.writer(rs.getString("writer"))
+							.email(rs.getString("email"))
+							.writedate(rs.getDate("writedate"))
+							.readed(rs.getInt("readed"))
+							.content(rs.getString("content"))
+							.build();
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            if (rs != null) rs.close();
-	            if (pstmt != null) pstmt.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+					list.add(vo);
+				} while (rs.next());
+			}
 
-	    return list;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (pstmt != null) pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return list;
 	}
 
 }
