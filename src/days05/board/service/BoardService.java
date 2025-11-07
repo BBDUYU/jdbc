@@ -187,13 +187,13 @@ public class BoardService {
 		}
 		return rowCount;	
 	}
-	public List<BoardDTO> searchService(String searchCondition, String searchWord) {
+	public List<BoardDTO> searchService(String Condition, String Word) {
 	    List<BoardDTO> list = null;
 	    try {
 	        ((BoardDAOImpl)this.dao).getConn().setAutoCommit(false);
 
 	        //1.
-	        list = this.dao.search(searchCondition, searchWord);
+	        list = this.dao.search(Condition, Word);
 
 			//2. 로그 기록 DB처리	        
 	        System.out.println("> 게시글 검색 : 로그 기록 서비스 작업");

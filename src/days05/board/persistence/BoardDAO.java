@@ -26,5 +26,5 @@ public interface BoardDAO {
 	 int update(BoardDTO dto) throws SQLException;
 
 	 //게시글 검색
-	 List<BoardDTO> search(String searchCondition, String searchWord);
+	 List<BoardDTO> search(String Condition, String Word);
 }

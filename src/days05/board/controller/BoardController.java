@@ -109,13 +109,13 @@ public class BoardController {
 
 	private void 검색하기() {
 	    System.out.println("> 검색조건을 입력 (t: 제목, c: 내용, w: 작성자, tc: 제목+내용)");
-	    String searchCondition = this.scanner.nextLine();
+	    String Condition = this.scanner.nextLine();
 
 	    System.out.print("> 검색어를 입력 ? ");
-	    String searchWord = this.scanner.nextLine();
+	    String Word = this.scanner.nextLine();
 
 	    // 서비스 호출
-	    List<BoardDTO> list = this.service.searchService(searchCondition, searchWord);
+	    List<BoardDTO> list = this.service.searchService(Condition, Word);
 
 	    // 결과 출력
 	    System.out.println("\t\t\t\t[ 검색 결과 ]");
@@ -135,6 +135,9 @@ public class BoardController {
 	                    dto.getWritedate(),
 	                    dto.getReaded());
 	        });
+		    System.out.println("-------------------------------------------------------------------------");
+	        System.out.println("\t\t PREV    [1] 2 3 4 5 6 7 8 9 10   NEXT");   
+		    System.out.println("-------------------------------------------------------------------------");
 	    }
 	}
 

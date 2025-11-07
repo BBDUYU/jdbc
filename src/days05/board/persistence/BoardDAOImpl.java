@@ -235,19 +235,19 @@ public class BoardDAOImpl implements BoardDAO{
 		return rowCount;
 	}
 	@Override
-	public List<BoardDTO> search(String searchCondition, String searchWord) {
+	public List<BoardDTO> search(String Condition, String Word) {
 	    String sql = "SELECT seq, title, writer, email, writedate, readed, content "
 	               + "FROM tbl_cstvsboard "
 	               + "WHERE ";
 
 	    // 조건별 SQL 조합
-	    if (searchCondition.equalsIgnoreCase("t")) {
+	    if (Condition.equalsIgnoreCase("t")) {
 	        sql += " REGEXP_LIKE(title, ?, 'i')";
-	    } else if (searchCondition.equalsIgnoreCase("c")) {
+	    } else if (Condition.equalsIgnoreCase("c")) {
 	        sql += " REGEXP_LIKE(content, ?, 'i')";
-	    } else if (searchCondition.equalsIgnoreCase("w")) {
+	    } else if (Condition.equalsIgnoreCase("w")) {
 	        sql += " REGEXP_LIKE(writer, ?, 'i')";
-	    } else if (searchCondition.equalsIgnoreCase("tc")) {
+	    } else if (Condition.equalsIgnoreCase("tc")) {
 	        sql += " REGEXP_LIKE(title, ?, 'i') OR REGEXP_LIKE(content, ?, 'i')";
 	    }
 
@@ -257,11 +257,10 @@ public class BoardDAOImpl implements BoardDAO{
 
 	    try {
 	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setString(1, searchWord);
-
-	        if (searchCondition.equalsIgnoreCase("tc")) {
-	            pstmt.setString(2, searchWord);
-	        }
+	        pstmt.setString(1, Condition);
+	        this.pstmt.setString(1, Word);
+	        if( Condition.equals("tc") ) this.pstmt.setString(2, Word); 
+	       
 
 	        rs = pstmt.executeQuery();
 

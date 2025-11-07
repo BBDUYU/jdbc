@@ -126,5 +126,23 @@ public class BoardDAOImpl_수정전 implements BoardDAO{
 		return null;
 	}
 
+	@Override
+	public int delete(int seq) throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int update(BoardDTO dto) throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<BoardDTO> search(String Condition, String Word) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
 
